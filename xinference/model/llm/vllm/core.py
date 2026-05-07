@@ -910,6 +910,7 @@ class VLLMModel(LLM):
                     **mm_processor_kwargs,
                     **pixel_params,
                 }
+
         return model_config
 
     @staticmethod
@@ -1751,7 +1752,7 @@ class VLLMChatModel(VLLMModel, ChatModelMixin):
             )
         else:
             c = await self.async_generate(
-                full_prompt, generate_config, request_id=request_id
+                full_prompt, generate_config, tools, request_id=request_id
             )
             assert not isinstance(c, AsyncGenerator)
             if tools:

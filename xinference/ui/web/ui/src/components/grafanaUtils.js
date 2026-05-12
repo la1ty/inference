@@ -5,7 +5,8 @@ export const buildGrafanaUrl = (
   config,
   theme = 'light',
   from = 'now-1h',
-  to = 'now'
+  to = 'now',
+  refresh
 ) => {
   const {
     grafana_url,
@@ -16,7 +17,9 @@ export const buildGrafanaUrl = (
   } = config
   if (!grafana_url) return null
 
-  let url = `${grafana_url}/d/${grafana_dashboard_uid}?orgId=1&kiosk&theme=${theme}&from=${from}&to=${to}`
+  let url = `${grafana_url}/d/${grafana_dashboard_uid}?orgId=1&kiosk&theme=${theme}&from=${encodeURIComponent(
+    from
+  )}&to=${encodeURIComponent(to)}`
 
   if (grafana_datasource) {
     url += `&var-datasource=${encodeURIComponent(grafana_datasource)}`
@@ -28,6 +31,9 @@ export const buildGrafanaUrl = (
   }
   if (cluster_name) {
     url += `&var-cluster=${encodeURIComponent(cluster_name)}`
+  }
+  if (refresh !== undefined) {
+    url += `&refresh=${encodeURIComponent(refresh)}`
   }
 
   return url
